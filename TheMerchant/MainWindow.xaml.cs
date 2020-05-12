@@ -202,7 +202,7 @@ namespace TheMerchant
             {
                 state.Money = state.Money - itemToSell.SellPrice;
                 OnItemSell(itemToSell);
-                
+                lblMoney.Content = state.Money.ToString();
             }
         }
 

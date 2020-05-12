@@ -48,7 +48,7 @@
             </ListView>
             <StackPanel Grid.Row="1" Orientation="Horizontal">
                 <Label Content="Money"></Label>
-                <Label x:Name="lblMoney"  Content="{Binding Money, UpdateSourceTrigger=PropertyChanged}" Width="90" HorizontalContentAlignment="Right"></Label>
+                <Label x:Name="lblMoney" Content="{Binding Money, UpdateSourceTrigger=PropertyChanged}" Width="90" HorizontalContentAlignment="Right"></Label>
             </StackPanel>
         </Grid>
         <Grid Grid.Row="2" Grid.Column="2" Margin="2">
