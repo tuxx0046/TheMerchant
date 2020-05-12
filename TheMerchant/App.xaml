@@ -4,6 +4,19 @@
              xmlns:local="clr-namespace:TheMerchant"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <SolidColorBrush x:Key="largeTextColor" Color="LightCoral"/>
+        <SolidColorBrush x:Key="buttonColor" Color="LightBlue"/>
+        <SolidColorBrush x:Key="buttonTextColor" Color="White"/>
+
+        <Style TargetType="Label" x:Key="largeText">
+            <Setter Property="Foreground" Value="{StaticResource largeTextColor}" />
+            <Setter Property="FontSize" Value="20" />
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource buttonColor}" />
+            <Setter Property="Foreground" Value="{StaticResource buttonTextColor}" />
+        </Style>
+
     </Application.Resources>
 </Application>

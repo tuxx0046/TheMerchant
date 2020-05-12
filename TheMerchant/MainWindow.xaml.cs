@@ -136,7 +136,7 @@ namespace TheMerchant
 
             // Update Viewlist & Label with new market
             currentMarket.DataContext = SelectedMarket;
-            marketName.Content = SelectedMarket.Name.ToString();
+            marketName.Content = SelectedMarket.Name;
             neighbouringMarkets.ItemsSource = SelectedMarket.Neighbours;
         }
 
@@ -303,6 +303,7 @@ namespace TheMerchant
 
                 marketName.Content = SelectedMarket.Name.ToString();
                 currentMarket.DataContext = SelectedMarket;
+                neighbouringMarkets.ItemsSource = SelectedMarket.Neighbours;
 
                 foreach (ItemName itemname in inventoryState)
                 {

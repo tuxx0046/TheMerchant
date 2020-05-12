@@ -19,11 +19,11 @@
             <ColumnDefinition Width="0.5*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Label x:Name="marketName" Grid.Row="0" Grid.Column="0" Content="Current Market" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
-        <Label Grid.Row="0" Grid.Column="1" Content="Merchant" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+        <Label x:Name="marketName" Style="{StaticResource largeText}" Grid.Row="0" Grid.Column="0" Content="Current Market" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+        <Label Style="{StaticResource largeText}" Grid.Row="0" Grid.Column="1" Content="Merchant" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
         <Label Grid.Row="1" Grid.Column="0" Content="Will trade with" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
         <Label Grid.Row="1" Grid.Column="1" Content="Inventory" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
-        <Label Grid.Row="0" Grid.Column="2" Content="Neighbouring Markets" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+        <Label Style="{StaticResource largeText}" Grid.Row="0" Grid.Column="2" Content="Neighbouring Markets" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
         
         <ListView x:Name="currentMarket" Grid.Row="2" Grid.Column="0" Margin="2" DataContext="{Binding selectedMarket}" ItemsSource="{Binding Inventory}">
             <ListView.View>
