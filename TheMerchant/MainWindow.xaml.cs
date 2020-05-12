@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -202,7 +203,7 @@ namespace TheMerchant
             {
                 state.Money = state.Money - itemToSell.SellPrice;
                 OnItemSell(itemToSell);
-                lblMoney.Content = state.Money.ToString();
+                UpdateControls();
             }
         }
 
@@ -212,6 +213,13 @@ namespace TheMerchant
             {
                 SellItemEvent(item);
             }
+        }
+
+        private void UpdateControls()
+        {
+            merchantInventory.Items.Refresh();
+            merchantInventory.ItemsSource = theKobman.Inventory;
+            lblMoney.Content = state.Money.ToString();
         }
     }
 }
