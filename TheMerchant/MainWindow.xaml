@@ -1,0 +1,73 @@
+﻿<Window x:Class="TheMerchant.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TheMerchant"
+        mc:Ignorable="d"
+        Title="The Købman" Height="420" Width="720">
+    
+    <Grid Margin="5,5,5,5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
+            <RowDefinition Height="4*"></RowDefinition>
+            <RowDefinition Height="0.5*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="0.5*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Label x:Name="marketName" Grid.Row="0" Grid.Column="0" Content="Current Market" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+        <Label Grid.Row="0" Grid.Column="1" Content="Merchant" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+        <Label Grid.Row="1" Grid.Column="0" Content="Will trade with" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+        <Label Grid.Row="1" Grid.Column="1" Content="Inventory" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+        <Label Grid.Row="0" Grid.Column="2" Content="Neighbouring Markets" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
+        
+        <ListView x:Name="currentMarket" Grid.Row="2" Grid.Column="0" Margin="2" DataContext="{Binding selectedMarket}" ItemsSource="{Binding Inventory}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Item" Width="80" DisplayMemberBinding="{Binding Name }" />
+                    <GridViewColumn Header="Buy Price" Width="70" DisplayMemberBinding="{Binding BuyPrice}" />
+                    <GridViewColumn Header="Sell price" Width="70" DisplayMemberBinding="{Binding SellPrice}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Grid Grid.Row="2" Grid.Column="1" Margin="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="8*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <ListView x:Name="merchantInventory" Grid.Row="0" ItemsSource="{Binding Inventory}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Item" Width="100" DisplayMemberBinding="{Binding Name}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <Label Content="Money"></Label>
+                <Label x:Name="lblMoney"  Content="{Binding Money, UpdateSourceTrigger=PropertyChanged}" Width="90" HorizontalContentAlignment="Right"></Label>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="2" Grid.Column="2" Margin="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="8*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <ListView x:Name="neighbouringMarkets" Grid.Row="0" ItemsSource="{Binding Markets}">
+                    <ListView.View>
+                        <GridView>
+                        <GridViewColumn Header="Name" Width="95" DisplayMemberBinding="{Binding Name }" />
+                        <GridViewColumn Header="Travel expenses" Width="90" DisplayMemberBinding="{Binding TravelExpenses}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            <Button Grid.Row="1" Content="Travel to Market" Margin="5" Click="TravelToMarket"></Button>
+        </Grid>
+        <Button Grid.Row="3" Grid.Column="0" Content="Buy Item" Margin="5"></Button>
+        <Button x:Name="btnSell" Grid.Row="3" Grid.Column="1" Content="Sell Item" Margin="5" Click="btnSell_Click"></Button>
+        <Button Grid.Row="3" Grid.Column="2" Content="End Turn" Margin="5"></Button>
+    </Grid>
+</Window>
