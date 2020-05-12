@@ -7,6 +7,7 @@ namespace TheMerchant.Classes
 {
     public class Item
     {
+        private string name;
         public string Name { get; set; }
         private int defaultPrice;
         public int BuyPrice { get; set; }

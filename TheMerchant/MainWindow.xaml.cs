@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,6 +20,7 @@ using TheMerchant.Classes;
 
 namespace TheMerchant
 {
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -31,9 +33,9 @@ namespace TheMerchant
         Market superbrugsen = new Market("SuperBrugsen", 2);
         Market kvickly = new Market("Kvickly", 3);
         Market irma = new Market("Irma", 1);
-        public List<Market> Markets { get; set; }
+        List<Market> Markets { get; set; }
 
-        Merchant theKobman = new Merchant(25);
+        Merchant theKobman = new Merchant();
 
         List<Item> items;
 
@@ -76,14 +78,11 @@ namespace TheMerchant
 
             currentMarket.DataContext = SelectedMarket;
             marketName.Content = SelectedMarket.Name.ToString();
-
-            // TODO check for database status
-            theKobman.TravelToMarket(SelectedMarket);
-
-            state.Money = 50;
-            state.ResidingMarketName = SelectedMarket.Name;
-            UpdateControls();
+  
+            
             NewGameState();
+            UpdateControls();
+
 
             lblMoney.DataContext = state;
         }
@@ -128,6 +127,7 @@ namespace TheMerchant
             SelectedMarket = neighbouringMarkets.SelectedItem as Market;
             
             state.Money = state.Money - SelectedMarket.TravelExpenses;
+            state.ResidingMarketName = SelectedMarket.Name;
             UpdateControls();
             CheckBalance();
 
@@ -223,6 +223,8 @@ namespace TheMerchant
             {
                 MessageBox.Show(SelectedMarket.Name + " will not do trade with that item. Bye.");
             }
+
+            CheckBalance();
         }
 
         protected virtual void OnItemSell(Item item)
@@ -258,6 +260,7 @@ namespace TheMerchant
             merchantInventory.Items.Refresh();
             merchantInventory.ItemsSource = theKobman.Inventory;
             lblMoney.Content = state.Money.ToString();
+            
         }
 
         private void CheckBalance()
@@ -290,6 +293,16 @@ namespace TheMerchant
 
                 theKobman.Inventory.Clear();
 
+                foreach (Market market in Markets)
+                {
+                    if (state.ResidingMarketName == market.Name)
+                    {
+                        SelectedMarket = market;
+                    }
+                }
+
+                marketName.Content = SelectedMarket.Name.ToString();
+                currentMarket.DataContext = SelectedMarket;
 
                 foreach (ItemName itemname in inventoryState)
                 {
@@ -336,6 +349,9 @@ namespace TheMerchant
 
         private void NewGameState()
         {
+            state.Money = 50;
+            state.ResidingMarketName = SelectedMarket.Name;
+
             using (SQLite.SQLiteConnection connection = new SQLite.SQLiteConnection(App.databasePath))
             {
                 connection.CreateTable<State>();

@@ -18,7 +18,6 @@ namespace TheMerchant
         private int travelExpenses;
         public int TravelExpenses { get { return travelExpenses; } set { travelExpenses = value; } }
 
-        public Market() { }
         public Market(string name, int travelExpenses) : base(name)
         {
             this.travelExpenses = travelExpenses;
