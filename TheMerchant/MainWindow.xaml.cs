@@ -42,12 +42,16 @@ namespace TheMerchant
         public delegate void SellItemHandler(Item item);
         public event SellItemHandler SellItemEvent;
 
+        public delegate void BuyItemHandler(Item item);
+        public event BuyItemHandler BuyItemEvent;
+
         public MainWindow()
         {
             InitializeComponent();
             Markets = new List<Market>();
             Loaded += InitializeGame;
             SellItemEvent += theKobman.SellItem;
+            BuyItemEvent += theKobman.BuyItem;
         }
 
         private void InitializeGame(object sender, RoutedEventArgs args)
@@ -201,9 +205,13 @@ namespace TheMerchant
             Item itemToSell = merchantInventory.SelectedItem as Item;
             if (SelectedMarket.Inventory.Contains(itemToSell))
             {
-                state.Money = state.Money - itemToSell.SellPrice;
+                state.Money = state.Money + itemToSell.SellPrice;
                 OnItemSell(itemToSell);
                 UpdateControls();
+            }
+            else
+            {
+                MessageBox.Show(SelectedMarket.Name + " will not do trade with that item. Bye.");
             }
         }
 
@@ -215,6 +223,28 @@ namespace TheMerchant
             }
         }
 
+        private void btnBuy_Click(object sender, RoutedEventArgs e)
+        {
+            Item itemToBuy = currentMarket.SelectedItem as Item;
+            if (state.Money > itemToBuy.BuyPrice)
+            {
+                state.Money = state.Money - itemToBuy.BuyPrice;
+                OnItemBuy(itemToBuy);
+                UpdateControls();
+            }
+        }
+
+        protected virtual void OnItemBuy(Item item)
+        {
+            if (BuyItemEvent != null)
+            {
+                BuyItemEvent(item);
+            }
+        }
+
+        /// <summary>
+        /// Method for updating merchant inventory and current money
+        /// </summary>
         private void UpdateControls()
         {
             merchantInventory.Items.Refresh();

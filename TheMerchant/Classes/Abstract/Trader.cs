@@ -26,7 +26,7 @@ namespace TheMerchant.Classes.Abstract
 
         public void BuyItem(Item item)
         {
-            throw new NotImplementedException();
+            Inventory.Add(item);
         }
 
         public void SellItem(Item item)

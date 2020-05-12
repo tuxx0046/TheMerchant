@@ -64,9 +64,9 @@
                         </GridView>
                     </ListView.View>
                 </ListView>
-            <Button Grid.Row="1" Content="Travel to Market" Margin="5" Click="TravelToMarket"></Button>
+            <Button Grid.Row="1" Content="Travel to Market" Margin="3, 3, 3, 0" Click="TravelToMarket"></Button>
         </Grid>
-        <Button Grid.Row="3" Grid.Column="0" Content="Buy Item" Margin="5"></Button>
+        <Button x:Name="btnBuy" Grid.Row="3" Grid.Column="0" Content="Buy Item" Margin="5" Click="btnBuy_Click"></Button>
         <Button x:Name="btnSell" Grid.Row="3" Grid.Column="1" Content="Sell Item" Margin="5" Click="btnSell_Click"></Button>
         <Button Grid.Row="3" Grid.Column="2" Content="End Turn" Margin="5"></Button>
     </Grid>
