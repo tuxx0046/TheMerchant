@@ -30,8 +30,8 @@ namespace TheMerchant
             Random rnd = new Random();
             foreach (Item item in Inventory)
             {
-                item.BuyPrice = item.BuyPrice + fluctuations[rnd.Next(0, fluctuations.Length)];
-                item.SellPrice = item.BuyPrice + 3;
+                item.SellPrice = item.SellPrice + fluctuations[rnd.Next(0, fluctuations.Length)];
+                item.BuyPrice = item.SellPrice + 3;
             }
         }
     }

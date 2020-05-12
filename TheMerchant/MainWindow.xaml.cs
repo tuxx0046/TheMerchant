@@ -37,6 +37,7 @@ namespace TheMerchant
 
         List<Item> items;
 
+        List<State> merchantState = new List<State>();
         State state = new State();
 
         public delegate void SellItemHandler(Item item);
@@ -48,6 +49,7 @@ namespace TheMerchant
         public MainWindow()
         {
             InitializeComponent();
+            merchantState.Add(state);
             Markets = new List<Market>();
             Loaded += InitializeGame;
             SellItemEvent += theKobman.SellItem;
@@ -67,8 +69,8 @@ namespace TheMerchant
             FillMarketInventories();
             FillMerchantInventory();
 
-            neighbouringMarkets.ItemsSource = Markets[0].Neighbours;
-            SelectedMarket = Markets[0];
+            neighbouringMarkets.ItemsSource = irma.Neighbours;
+            SelectedMarket = irma;
             merchantInventory.DataContext = theKobman;
 
             currentMarket.DataContext = SelectedMarket;
@@ -79,6 +81,8 @@ namespace TheMerchant
 
             state.Money = 50;
             state.ResidingMarketName = SelectedMarket.Name;
+            UpdateControls();
+            NeedGameState();
 
             lblMoney.DataContext = state;
         }
@@ -115,11 +119,16 @@ namespace TheMerchant
         /// <param name="e"></param>
         private void TravelToMarket(object sender, RoutedEventArgs e)
         {
+            
             // Reset prices for market before moving to new market
             ResetPrices(SelectedMarket);
             
             // Set new market
             SelectedMarket = neighbouringMarkets.SelectedItem as Market;
+            
+            state.Money = state.Money - SelectedMarket.TravelExpenses;
+            UpdateControls();
+            CheckBalance();
 
             // Change prices for the new market
             SelectedMarket.FluctuatePrices();
@@ -205,7 +214,7 @@ namespace TheMerchant
             Item itemToSell = merchantInventory.SelectedItem as Item;
             if (SelectedMarket.Inventory.Contains(itemToSell))
             {
-                state.Money = state.Money + itemToSell.SellPrice;
+                state.Money = state.Money + itemToSell.BuyPrice;
                 OnItemSell(itemToSell);
                 UpdateControls();
             }
@@ -226,12 +235,10 @@ namespace TheMerchant
         private void btnBuy_Click(object sender, RoutedEventArgs e)
         {
             Item itemToBuy = currentMarket.SelectedItem as Item;
-            if (state.Money > itemToBuy.BuyPrice)
-            {
-                state.Money = state.Money - itemToBuy.BuyPrice;
-                OnItemBuy(itemToBuy);
-                UpdateControls();
-            }
+            state.Money = state.Money - itemToBuy.SellPrice;
+            OnItemBuy(itemToBuy);
+            UpdateControls();
+            CheckBalance();
         }
 
         protected virtual void OnItemBuy(Item item)
@@ -250,6 +257,61 @@ namespace TheMerchant
             merchantInventory.Items.Refresh();
             merchantInventory.ItemsSource = theKobman.Inventory;
             lblMoney.Content = state.Money.ToString();
+        }
+
+        private void CheckBalance()
+        {
+            if (state.Money <= 0)
+            {
+                MessageBox.Show("You've spend all your money and lost in the life as a trading merchant!");
+                Application.Current.Shutdown();
+            }
+
+            if (state.Money >= 100)
+            {
+                MessageBox.Show("You've earned enough of a lifetime! No need to work, you've won in the game of Life!");
+                Application.Current.Shutdown();
+            }
+        }
+
+        private void ReadState()
+        {
+            using (SQLite.SQLiteConnection connection = new SQLite.SQLiteConnection(App.databasePath))
+            {
+                connection.CreateTable<State>();
+                merchantState = connection.Table<State>().ToList();
+            }
+
+            if (merchantState != null)
+            {
+                state = merchantState[0];
+            }
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(App.databasePath))
+            {
+                connection.CreateTable<State>();
+                connection.Update(state);
+            }
+        }
+
+        private void btnLoad_Click(object sender, RoutedEventArgs e)
+        {
+            ReadState();
+            UpdateControls();
+        }
+
+        private void NeedGameState()
+        {
+            using (SQLite.SQLiteConnection connection = new SQLite.SQLiteConnection(App.databasePath))
+            {
+                connection.CreateTable<State>();
+                merchantState = connection.Table<State>().ToList();
+                connection.Insert(state);
+
+            }
         }
     }
 }

@@ -29,8 +29,8 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Item" Width="80" DisplayMemberBinding="{Binding Name }" />
-                    <GridViewColumn Header="Buy Price" Width="70" DisplayMemberBinding="{Binding BuyPrice}" />
-                    <GridViewColumn Header="Sell price" Width="70" DisplayMemberBinding="{Binding SellPrice}" />
+                    <GridViewColumn Header="Will buy for" Width="70" DisplayMemberBinding="{Binding BuyPrice}" />
+                    <GridViewColumn Header="Will sell for" Width="70" DisplayMemberBinding="{Binding SellPrice}" />
                 </GridView>
             </ListView.View>
         </ListView>
@@ -68,6 +68,13 @@
         </Grid>
         <Button x:Name="btnBuy" Grid.Row="3" Grid.Column="0" Content="Buy Item" Margin="5" Click="btnBuy_Click"></Button>
         <Button x:Name="btnSell" Grid.Row="3" Grid.Column="1" Content="Sell Item" Margin="5" Click="btnSell_Click"></Button>
-        <Button Grid.Row="3" Grid.Column="2" Content="End Turn" Margin="5"></Button>
+        <Grid  Grid.Row="3" Grid.Column="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="btnSave" Grid.Column="0" Content="Save" Margin="5" Click="btnSave_Click"></Button>
+            <Button x:Name="btnLoad" Grid.Column="1" Content="Load" Margin="5" Click="btnLoad_Click"></Button>
+        </Grid>
     </Grid>
 </Window>
