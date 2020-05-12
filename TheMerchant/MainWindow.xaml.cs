@@ -37,6 +37,7 @@ namespace TheMerchant
 
         List<Item> items;
 
+        List<ItemName> inventoryState = new List<ItemName>();
         List<State> merchantState = new List<State>();
         State state = new State();
 
@@ -82,7 +83,7 @@ namespace TheMerchant
             state.Money = 50;
             state.ResidingMarketName = SelectedMarket.Name;
             UpdateControls();
-            NeedGameState();
+            NewGameState();
 
             lblMoney.DataContext = state;
         }
@@ -280,20 +281,50 @@ namespace TheMerchant
             {
                 connection.CreateTable<State>();
                 merchantState = connection.Table<State>().ToList();
+                inventoryState = connection.Table<ItemName>().ToList();
             }
 
             if (merchantState != null)
             {
                 state = merchantState[0];
+
+                theKobman.Inventory.Clear();
+
+
+                foreach (ItemName itemname in inventoryState)
+                {
+                    foreach (Item item in items)
+                    {
+                        if (item.Name == itemname.Name)
+                        {
+                            theKobman.Inventory.Add(item);
+                        }
+                    }
+                }
             }
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
+            inventoryState.Clear();
+
+            foreach (Item item in theKobman.Inventory)
+            {
+                inventoryState.Add(new ItemName { Name = item.Name });
+            }
+
             using (SQLiteConnection connection = new SQLiteConnection(App.databasePath))
             {
                 connection.CreateTable<State>();
                 connection.Update(state);
+
+                connection.DropTable<ItemName>();
+                connection.CreateTable<ItemName>();
+
+                foreach (ItemName itemname in inventoryState)
+                {
+                    connection.Insert(itemname);
+                }
             }
         }
 
@@ -303,14 +334,15 @@ namespace TheMerchant
             UpdateControls();
         }
 
-        private void NeedGameState()
+        private void NewGameState()
         {
             using (SQLite.SQLiteConnection connection = new SQLite.SQLiteConnection(App.databasePath))
             {
                 connection.CreateTable<State>();
+                connection.CreateTable<ItemName>();
                 merchantState = connection.Table<State>().ToList();
+                inventoryState = connection.Table<ItemName>().ToList();
                 connection.Insert(state);
-
             }
         }
     }

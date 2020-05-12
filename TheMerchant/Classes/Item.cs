@@ -11,7 +11,7 @@ namespace TheMerchant.Classes
         private int defaultPrice;
         public int BuyPrice { get; set; }
         public int SellPrice { get; set; }
-
+        
         public Item(string name, int price)
         {
             this.Name = name;
